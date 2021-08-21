@@ -1,0 +1,24 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+mainClassName = 'App'
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.2'
+    implementation 'org.slf4j:slf4j-simple:1.7.32'
+    implementation 'com.sparkjava:spark-core:2.9.3'
+    implementation 'org.postgresql:postgresql:42.2.23.jre7'
+    implementation 'org.sql2o.extensions:sql2o-postgres:1.6.0'
+}
+
+test {
+    useJUnitPlatform()
+}
