@@ -29,6 +29,8 @@ class EmployeeTest {
         try (Connection connection= DB.sql2o.open()){
             String clearDepartments= "DELETE FROM departments *;";
             connection.createQuery(clearDepartments).executeUpdate();
+            String clearEmployee= "DELETE FROM employee *;";
+            connection.createQuery(clearEmployee).executeUpdate();
 
 
         }
@@ -53,35 +55,40 @@ class EmployeeTest {
         assertEquals("Responsible for all telecommunication services", testEmployee.getRole());
         assertEquals("Junior IT expert",testEmployee.getPosition());
     }
-//    @Test
-//    void save_InstanceOfDepartments_true(){ //test instanceof save method that save data to database
-//        testDepartment.save();
-//        assertEquals(Department.getAll().get(0),testDepartment);
-//    }
-//    @Test
-//    void testInstanceOfIdGetter_true(){ // test instance of id getter
-//        testDepartment.save();
-//        assertEquals(Department.getAll().get(0).getId(), testDepartment.getId());
-//    }
-//    @Test
-//    void testInstanceOfDeleteDepartment_true(){ //test instance of delete department  method
-//        testDepartment.save();
-//        Department testDepartment1= new Department("IT","Responsible for all telecommunication services");
-//        testDepartment1.save();
-//        Department.deleteDepartment(testDepartment1.getId());
-//        assertEquals(Department.getAll().size(),1);
-//    }
-//    @Test
-//    void testInstanceOfFindById_true(){ //test instance of find by id method
-//        testDepartment.save();
-//        assertEquals(Department.findById(testDepartment.getId()),testDepartment);
-//    }
-//    @Test
-//    void testInstanceOfClearAll_true(){ // test instance of clear all data in the database method
-//        testDepartment.save();
-//        Department.clearAll();
-//        assertEquals(Department.getAll().size(),0);
-//    }
+    @Test
+    void save_InstanceOfEmployee_true(){ //test instanceof save method that save data to database
+        testEmployee.save();
+        assertEquals(Employee.getAllEmployees().get(0),testEmployee);
+    }
+    @Test
+    void testInstanceOfIdGetter_true(){ // test instance of id getter
+        testEmployee.save();
+        assertEquals(Employee.getAllEmployees().get(0).getId(), testEmployee.getId());
+    }
+    @Test
+    void testInstanceOfDeleteEmployee_true(){ //test instance of delete Employee,m  method
+        testEmployee.save();
+        Employee testEmployee1= new Employee("Kelvin","Junior IT expert","Responsible for all telecommunication services", testDepartment.getId());
+        testEmployee1.save();
+        Employee.deleteSingleEmployee(testEmployee.getId());
+        assertEquals(Employee.getAllEmployees().size(),1);
+    }
+    @Test
+    void testInstanceOfFindById_true(){ //test instance of find by id method
+        testEmployee.save();
+        assertEquals(Employee.findEmployeeById(testEmployee.getId()),testEmployee);
+    }
+    @Test
+    void testInstanceOfClearAll_true(){ // test instance of clear all data in the database method
+        testEmployee.save();
+        Employee.clearAllEmployees();
+        assertEquals(Employee.getAllEmployees().size(),0);
+    }
+    @Test
+    void testInstanceOfFindDepartment_true(){// test instance of find employees department
+        testEmployee.save();
+        assertEquals(testDepartment.getName(),testEmployee.findDepartment().getName());
+    }
 
 
 }
