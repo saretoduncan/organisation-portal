@@ -5,6 +5,7 @@ import org.sql2o.Connection;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.function.DoublePredicate;
 
 public class Department {
     private String name;
@@ -62,10 +63,33 @@ public class Department {
                     .getKey();
         }
     }
+
     public static List<Department> getAll(){
         try(Connection connection= DB.sql2o.open()){
             String getAll= "SELECT * FROM departments;";
             return  connection.createQuery(getAll).executeAndFetch(Department.class);
+        }
+    }
+    public static Department findById(int id){
+        try(Connection connection= DB.sql2o.open()){
+            String findDepartment= "SELECT * FROM departments WHERE id = :id";
+            return connection.createQuery(findDepartment)
+                    .addParameter("id",id)
+                    .executeAndFetchFirst(Department.class);
+        }
+    }
+    public static void deleteDepartment(int id){
+        try (Connection connection= DB.sql2o.open()){
+            String deleteSingleInstance = "DELETE FROM departments WHERE id = :id";
+            connection.createQuery(deleteSingleInstance)
+                    .addParameter("id", id)
+                    .executeUpdate();
+        }
+    }
+    public static void clearAll(){
+        try (Connection connection= DB.sql2o.open()){
+            String deleteAllInstances= "DELETE FROM departments *;";
+            connection.createQuery(deleteAllInstances).executeUpdate();
         }
     }
 }
