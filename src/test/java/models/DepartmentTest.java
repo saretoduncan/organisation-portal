@@ -8,12 +8,11 @@ import org.junit.jupiter.api.Test;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 
-import java.util.function.DoublePredicate;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class DepartmentTest {
     Department testDepartment;
+    User testEmployee;
     @BeforeAll
     public static void beforeAll(){ //access database
         DB.sql2o= new Sql2o("jdbc:postgresql://localhost:5432/organisation_db_test","softwaredev","1234");
@@ -76,6 +75,16 @@ class DepartmentTest {
         testDepartment.save();
       Department.clearAll();
         assertEquals(Department.getAll().size(),0);
+  }
+  @Test
+    void testInstanceOfEmployees(){
+        testDepartment.save();
+      testEmployee = new User("Duncan","senior developer","manage projects",testDepartment.getId() );
+      testEmployee.save();
+      User testEmployee1= new User("Kelvin","Junior IT expert","Responsible for all telecommunication services", testDepartment.getId());
+      testEmployee1.save();
+      assertEquals(testDepartment.getAllDepartmentEmployees().size(),2);
+
   }
 
 

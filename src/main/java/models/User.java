@@ -7,7 +7,7 @@ import org.sql2o.Sql2oException;
 import java.util.List;
 import java.util.Objects;
 
-public class Employee {
+public class User {
     String name;
     String role;
     String position;
@@ -15,7 +15,7 @@ public class Employee {
 
     int id;
 
-    public Employee(String name, String position, String role, int departmentId){
+    public User(String name, String position, String role, int departmentId){
         this.name= name;
         this.role = role;
         this.departmentId=departmentId;
@@ -27,8 +27,8 @@ public class Employee {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Employee employee = (Employee) o;
-        return departmentId == employee.departmentId && id == employee.id && Objects.equals(name, employee.name) && Objects.equals(role, employee.role) && Objects.equals(position, employee.position);
+        User user = (User) o;
+        return departmentId == user.departmentId && id == user.id && Objects.equals(name, user.name) && Objects.equals(role, user.role) && Objects.equals(position, user.position);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class Employee {
     }
     public  void save(){
         try (Connection con = DB.sql2o.open()){
-          String sql = "INSERT INTO employee (name, role, position, departmentId) VALUES (:name, :role, :position, :departmentId);";
+          String sql = "INSERT INTO users (name, role, position, departmentId) VALUES (:name, :role, :position, :departmentId);";
              this.id= (int) con.createQuery(sql,true)
                      .addParameter("name", this.name)
                      .addParameter("role", this.role)
@@ -97,33 +97,37 @@ public class Employee {
                     .executeAndFetchFirst(Department.class);
         }
     }
-public  static List<Employee> getAllEmployees() {
+public  static List<User> getAllEmployees() {
     try (Connection con = DB.sql2o.open()) {
-        String getAll = "SELECT * FROM employee;";
-        return con.createQuery(getAll).executeAndFetch(Employee.class);
+        String getAll = "SELECT * FROM users;";
+        return con.createQuery(getAll).executeAndFetch(User.class);
 
     }
 
 }
     public static void deleteSingleEmployee(int id){
         try (Connection con = DB.sql2o.open()){
-            String delete = "DELETE FROM employee WHERE id= :id";
+            String delete = "DELETE FROM users WHERE id= :id";
             con.createQuery(delete)
                     .addParameter("id", id)
                     .executeUpdate();
+        }catch (Sql2oException err){
+            System.out.println("Error::: "+ err);
         }
     }
-    public static Employee findEmployeeById(int id){
+    public static User findEmployeeById(int id){
         try (Connection con = DB.sql2o.open()){
-            String findById = "SELECT * FROM employee WHERE id = :id";
+            String findById = "SELECT * FROM users WHERE id = :id";
             return con.createQuery(findById).addParameter("id", id)
-                    .executeAndFetchFirst(Employee.class);
+                    .executeAndFetchFirst(User.class);
         }
     }
     public static void clearAllEmployees(){
         try (Connection con = DB.sql2o.open()) {
-        String clearAll= "DELETE FROM employee *";
+        String clearAll= "DELETE FROM users *";
          con.createQuery(clearAll).executeUpdate();
+        }catch (Sql2oException err){
+            System.out.println("Error::: "+ err);
         }
 
     }

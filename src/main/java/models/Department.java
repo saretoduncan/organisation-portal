@@ -2,10 +2,10 @@ package models;
 
 import database_config.DB;
 import org.sql2o.Connection;
+import org.sql2o.Sql2oException;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.function.DoublePredicate;
 
 public class Department {
     private String name;
@@ -61,9 +61,20 @@ public class Department {
                     .addParameter("description", this.description)
                     .executeUpdate()
                     .getKey();
+        }catch (Sql2oException err){
+            System.out.println("Error::: "+ err);
         }
     }
+public List<User> getAllDepartmentEmployees(){
+        try(Connection con = DB.sql2o.open()){
+            String listOfEmployees="SELECT * FROM users WHERE departmentId = :id";
+           return con.createQuery(listOfEmployees).addParameter("id",this.id)
+                    .executeAndFetch(User.class);
 
+        }
+
+
+}
     public static List<Department> getAll(){
         try(Connection connection= DB.sql2o.open()){
             String getAll= "SELECT * FROM departments;";
@@ -78,18 +89,23 @@ public class Department {
                     .executeAndFetchFirst(Department.class);
         }
     }
+
     public static void deleteDepartment(int id){
         try (Connection connection= DB.sql2o.open()){
             String deleteSingleInstance = "DELETE FROM departments WHERE id = :id";
             connection.createQuery(deleteSingleInstance)
                     .addParameter("id", id)
                     .executeUpdate();
+        }catch (Sql2oException err){
+            System.out.println("Error::: "+ err);
         }
     }
     public static void clearAll(){
         try (Connection connection= DB.sql2o.open()){
             String deleteAllInstances= "DELETE FROM departments *;";
             connection.createQuery(deleteAllInstances).executeUpdate();
+        } catch (Sql2oException err){
+            System.out.println("Error::: "+ err);
         }
     }
 }
