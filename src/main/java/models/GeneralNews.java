@@ -13,25 +13,7 @@ public class GeneralNews extends News {
         this.newsHeading = newsHeading;
         this.personId=personId;
     }
-//   public String getHeading(){
-//        return this.newsHeading;
-//   }
-//   public void setNewsHeading(String newsHeading){
-//        this.newsHeading = newsHeading;
-//   }
-//   public String getNews(){
-//        return this.news;
-//   }
-//   public void setNews(String news){
-//        this.news=news;
-//
-//   }
-//   public int getPersonId(){
-//        return this.personId;
-//   }
-//   public void setPersonId(int id){
-//        this.personId= id;
-//   }
+
    public int getId(){
         return this.id;
    }
