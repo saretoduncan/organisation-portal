@@ -89,6 +89,19 @@ public class User {
             System.out.println("Error ::: "+ er);
         }
     }
+    public void changeDepartment(int departmentId){
+        try(Connection con = DB.sql2o.open()) {
+            String changeDepartment = "UPDATE users SET departmentid = :departmentId WHERE id = :id";
+
+            con.createQuery(changeDepartment)
+                    .addParameter("departmentId", departmentId)
+                    .addParameter("id", this.id)
+                    .executeUpdate();
+            this.departmentId=departmentId;
+        }catch (Sql2oException err){
+            System.out.println("Error ::: " +err);
+        }
+    }
     public Department findDepartment(){
         try (Connection con = DB.sql2o.open()){
             String findDepartment= "SELECT * FROM departments where id = :departmentId ";

@@ -74,6 +74,14 @@ class UserTest {
         assertEquals(User.getAllEmployees().size(),1);
     }
     @Test
+    void testInstanceOfChangeDepartment_true(){// test instance of change of department
+        testUser.save();
+        Department testDepartment1= new Department("IT","Responsible for all telecommunication services");
+        testDepartment1.save();
+        testUser.changeDepartment(testDepartment1.getId());
+        assertEquals(testUser.findDepartment().getName(),testDepartment1.getName());
+    }
+    @Test
     void testInstanceOfFindById_true(){ //test instance of find by id method
         testUser.save();
         assertEquals(User.findEmployeeById(testUser.getId()), testUser);
