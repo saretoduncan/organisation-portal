@@ -4,6 +4,10 @@ import models.Department;
 import models.DepartmentNews;
 import models.GeneralNews;
 import models.User;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import static spark.Spark.*;
 
 
@@ -14,13 +18,14 @@ public class App {
         post("/department/new", "application/json",(request, response) ->{
             Department newDepartment = gson.fromJson(request.body(), Department.class);
             newDepartment.save();
+
             response.status(201);
 
             return gson.toJson(newDepartment);
 
         });
         // get all departments
-        get("/departments","application/json", (request, response) -> {
+        get("/","application/json", (request, response) -> {
              return gson.toJson(Department.getAll());
         });
         //get departmentById
@@ -106,6 +111,7 @@ public class App {
         //get specific general news
         get("/generalnews/:newsId","application/json",(request, response) -> {
             int newsId= Integer.parseInt(request.params("newsId"));
+
             return gson.toJson(GeneralNews.findGeneralNewsById(newsId));
         });
         //get posted by who
@@ -169,6 +175,15 @@ public class App {
         //FILTERS
         after((req, res) ->{
             res.type("application/json");
+        });
+        exception(ApiException.class, (exc, req, res) -> {
+            ApiException err = (ApiException) exc;
+            Map<String, Object> jsonMap = new HashMap<>();
+            jsonMap.put("status", err.getStatusCode());
+            jsonMap.put("errorMessage", err.getMessage());
+            res.type("application/json"); //after does not run in case of an exception.
+            res.status(err.getStatusCode()); //set the status
+            res.body(gson.toJson(jsonMap));  //set the output.
         });
     }
 }
